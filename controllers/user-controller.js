@@ -1,7 +1,10 @@
+/* eslint-disable no-fallthrough */
 const createToken = require('../helpers/token')
 const { User, Tweet, Reply, Like } = require('../models')
+const helpers = require('../_helpers')
 const bcrypt = require('bcryptjs')
 const { imgurCoverHandler, imgurAvatarHandler } = require('../helpers/file-helpers')
+const tweetServices = require('../services/tweets')
 
 const userController = {
   login: async (req, res, next) => {
@@ -20,36 +23,48 @@ const userController = {
       next(err)
     }
   },
-  signUp: (req, res, next) => {
-    const { name, account, email, password, checkPassword } = req.body
-    if (!name) throw new Error('請輸入名字')
-    if (!account) throw new Error('請輸入帳號')
-    if (!email) throw new Error('請輸入信箱')
-    if (!password) throw new Error('請輸入密碼')
-    if (password !== checkPassword) throw new Error('密碼與確認密碼不符，請重新輸入')
+  signUp: async (req, res, next) => {
     try {
-      return Promise.all([
-        User.findOne({ where: { email: req.body.email } }),
-        User.findOne({ where: { account: req.body.account } })
-      ])
-        .then(([email, account]) => {
-          if (email) return res.status(403).json({ status: 'error', message: '此Email已被註冊！！' })
-          if (account) return res.status(403).json({ status: 'error', message: '此Account已被註冊！！' })
-          // 會導致crush
-          // if (email) throw new Error('此Email已被註冊！！')
-          // if (account) throw new Error('此Email已被註冊！！')
-          return bcrypt.hash(req.body.password, 10)
-            .then(hash => User.create({
-              name: req.body.name,
-              account: req.body.account,
-              email: req.body.email,
-              password: hash,
-              role: 'user'
-            }))
-            .then(user => {
-              res.json({ status: 'success', user })
-            })
-        })
+      const { name, account, email, password, checkPassword } = req.body
+      const errorMsg = []
+      if (!name) errorMsg.push('名字')
+      if (!account) errorMsg.push('帳號')
+      if (!email) errorMsg.push('信箱')
+      if (!password) errorMsg.push('密碼')
+      if (errorMsg.length) {
+        let message = `請輸入${errorMsg[0]}`
+        for (let index = 1; index < errorMsg.length; index++) {
+          if (index < errorMsg.length - 1) {
+            message += `、${errorMsg[index]}`
+          } else {
+            message += `及${errorMsg[index]}`
+          }
+        }
+        throw new Error(message)
+      }
+      if (password !== checkPassword) throw new Error('密碼與確認密碼不符，請重新輸入')
+      const emailCheck = await User.findOne({ where: { email: req.body.email } })
+      const accountCheck = await User.findOne({ where: { account: req.body.account } })
+      if (emailCheck) throw new Error('此Email已被註冊！！')
+      if (accountCheck) throw new Error('此帳號已被註冊！！')
+      const hash = await bcrypt.hash(req.body.password, 10)
+      await User.create({
+        name,
+        account,
+        email,
+        password: hash,
+        role: 'user'
+      })
+      const user = await User.findOne({
+        attributes: {
+          exclude: ['password']
+        },
+        where: {
+          account
+        },
+        raw: true
+      })
+      res.status(200).json(user)
     } catch (err) {
       next(err)
     }
