@@ -49,26 +49,26 @@ IMGUR_CLIENT_ID=自己在[imgur](https://api.imgur.com/)的ID
 ***
 ## API 文件  
 
-前端連接時依照後端伺服器設置位置俄決定
+前端連接時依照後端伺服器設置位置俄決定 <br />
 `{{baseUrl}}` <br />
 本地 `http://localhost:3000` <br />
-雲端範例 `https://still-savannah-82085.herokuapp.com`
+雲端範例 `https://still-savannah-82085.herokuapp.com` <br />
 
 ### 後台相關
   <br />
 登入 <br />
-提供後台管理者進行登入
+提供後台管理者進行登入 <br />
 
-`POST {{baseUrl}}/api/admin/login`
+`POST {{baseUrl}}/api/admin/login` <br />
 
-需要資料範本
+需要資料範本 <br />
 ```
 {
     "account": "root",
     "password": "12345678"
 }
 ```
-登入成功後回傳資料
+登入成功後回傳資料 <br />
 ```
 {
     "status": "success",
@@ -93,7 +93,7 @@ IMGUR_CLIENT_ID=自己在[imgur](https://api.imgur.com/)的ID
 瀏覽所有推文 <br />
 瀏覽所有推文，推文只顯示前 50 個字  <br />
 `GET {{baseUrl}}/api/admin/tweets`  <br />
-回傳資料
+回傳資料 <br />
 ```
 [
     {
@@ -115,7 +115,7 @@ IMGUR_CLIENT_ID=自己在[imgur](https://api.imgur.com/)的ID
 瀏覽所有使用者 <br />
 瀏覽所有使用者，使用者按照推文數量排列  <br />
 `GET {{baseUrl}}/api/admin/users`  <br />
-回傳資料
+回傳資料 <br />
 ```
 {
         "id": 14,
@@ -136,24 +136,24 @@ IMGUR_CLIENT_ID=自己在[imgur](https://api.imgur.com/)的ID
 刪除單一推文  <br />
 管理者刪除單一推文  <br />
 `DELETE /api/admin/tweets/:id` <br />
-id => 推文 id
+id => 推文 id <br />
   <br />
-回傳
+回傳成功
 
 ### 前台相關
   <br />
 登入 <br />
 提供前台使用者進行登入 <br />
 
-`POST {{baseUrl}}/api/login`
-需要資料範本
+`POST {{baseUrl}}/api/login`  <br />
+需要資料範本  <br />
 ```
 {
     "account": "user1",
     "password": "12345678"
 }
 ```
-登入成功後回傳資料
+登入成功後回傳資料  <br />
 
 ```
 {
@@ -177,8 +177,8 @@ id => 推文 id
 ```
 
 註冊  <br />
-使用者新建一個帳號，其中信箱跟帳號不可與他人相同
-需要資料範本
+使用者新建一個帳號，其中信箱跟帳號不可與他人相同  <br />
+需要資料範本  <br />
 ```
 {
     "account": "example",
@@ -188,7 +188,7 @@ id => 推文 id
     "checkPassword": "12345678"
 }
 ```
-註冊成功回傳資料
+註冊成功回傳資料  <br />
 ```
 {
     "id": 164,
@@ -205,9 +205,8 @@ id => 推文 id
 ```
 
 使用者瀏覽所有推文 <br />
-`GET {{baseUrl}}/api/tweets`
-   <br />
-回傳所有推文
+`GET {{baseUrl}}/api/tweets`  <br />
+回傳所有推文  <br />
 ```
 [
     {
@@ -228,9 +227,8 @@ id => 推文 id
 
 使用者讀取單一推文  <br />
 `GET {{baseUrl}}/api/tweets/:id`  <br />
-id => 推文 id
-<br />
-成功回傳資料
+id => 推文 id  <br />
+成功回傳資料  <br />
 ```
 {
     "avatar": "https://loremflickr.com/250/250/paradise/?random=72",
@@ -249,13 +247,13 @@ id => 推文 id
 
 使用者新增推文  <br />
 `POST {{baseUrl}}/api/tweets`  <br />
-需要資料範本
+需要資料範本  <br />
 ```
 {
     "description": "example"
 }
 ```
-回傳所有推文
+回傳所有推文  <br />
 ```
 [
     {
@@ -277,7 +275,7 @@ id => 推文 id
 使用者喜歡一篇推文  <br />
 `POST {{baseUrl}}/api/tweets/:id/like` <br />
 id => 推文 id  <br />
-回傳該推文
+回傳該推文  <br />
 ```
 {
     "avatar": "https://loremflickr.com/250/250/paradise/?random=6",
@@ -296,7 +294,7 @@ id => 推文 id  <br />
 使用者不喜歡一篇推文  <br />
 `POST {{baseUrl}}/api/tweets/:id/unlike` <br />
 id => 推文 id  <br />
-回傳該推文
+回傳該推文  <br />
 ```
 {
     "avatar": "https://loremflickr.com/250/250/paradise/?random=6",
@@ -315,7 +313,7 @@ id => 推文 id  <br />
 使用者查看一篇推文所有回覆  <br />
 `GET {{baseUrl}}/api/tweets/:tweet_id/replies` <br />
 tweet_id => 推文 id  <br />
-回傳該推文的所有回覆
+回傳該推文的所有回覆  <br />
 ```
 [
     {
@@ -338,11 +336,11 @@ tweet_id => 推文 id  <br />
 使用者回覆一篇推文  <br />
 `POST  {{baseUrl}}/api/tweets/:tweet_id/replies` <br />
 tweet_id => 推文 id  <br />
-回傳成功訊息
+回傳成功訊息  <br />
 
 使用者更新使用者資料  <br />
 `PUT {{baseUrl}}/api/users/:id` <br />
-id => 使用者 id
+id => 使用者 id  <br />
 需要資料範本  <br />
 ```
 name
